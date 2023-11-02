@@ -1,0 +1,74 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color:  #FFDE59;
+    height: 200px;
+    margin-top: 33%;
+    /* border-top: 1px solid black;  */
+  }
+  
+  .upper {
+    flex: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .lower {
+    flex: 4;
+    display: flex;
+  }
+  
+  .location-icon {
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  
+  .rounded-edge{
+    width: 1000px;
+    height: 40px;
+  }
+
+  .rounded-edge-textarea {
+    flex: 1;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: inherit;
+    height: inherit;
+  }
+  
+  .rounded-edge-textarea::placeholder {
+    font-size: 20px; /* Adjust the font size as needed */
+    color: #aaa; /* Adjust the color as needed */
+  }
+  
+  .divider-line {
+    border-top: 2px solid black;
+    margin: 10px 0;
+  }
+  
+  .divider-line-vertical {
+    width: 2px;
+    background-color: black;
+    margin: 0 10px;
+  }
+  
+  .left-part {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Add styling for the folder icon */
+  }
+  
+  .right-part {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Add styling for the camera icon */
+  }
+  

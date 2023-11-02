@@ -1,0 +1,31 @@
+.location-icon {
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+
+  .upper {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .rounded-edge{
+    width: 1000px;
+    height: 40px;
+  }
+
+  .rounded-edge-textarea {
+    flex: 1;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: inherit;
+    height: inherit;
+  }
+  
+  .rounded-edge-textarea::placeholder {
+    font-size: 20px; /* Adjust the font size as needed */
+    color: #aaa; /* Adjust the color as needed */
+  }
