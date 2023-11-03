@@ -1,0 +1,24 @@
+.user{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+}
+
+.user-username-text{
+    margin-left: 140px;
+    font-size: 22px;
+}
+
+.user-username-value {
+    color: grey;
+    margin-right: 140px;
+    font-size: 22px;
+}
+.prefrence {
+    border-bottom: 1px solid black;
+}
+
+.radio {
+    margin-left: 200px;
+}

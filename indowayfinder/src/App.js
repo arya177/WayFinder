@@ -1,15 +1,18 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import MapInterface from './components/MapInterface';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import MyGroup from './pages/MyGroup';
+import Settings from './pages/Settings';
 
 function App() {
   return (
-    <div className="App">
-      <Navbar/>
-      <MapInterface/>
-      <Footer/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/mygroups" element={<MyGroup />} />     
+        <Route path="/settings" element={<Settings />} />   
+      </Routes>
+    </Router>
   );
 }
 
