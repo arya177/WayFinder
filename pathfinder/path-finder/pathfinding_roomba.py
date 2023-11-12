@@ -3,9 +3,12 @@ from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 from pathfinding.core.diagonal_movement import DiagonalMovement
 
+# Function to save a screenshot
+def save_screenshot(screen, filename):
+    pygame.image.save(screen, filename)
+
 class Pathfinder:
 	def __init__(self,matrix):
-
 		# setup
 		self.matrix = matrix
 		self.grid = Grid(matrix = matrix)
@@ -43,7 +46,6 @@ class Pathfinder:
 		# path
 		finder = AStarFinder(diagonal_movement = DiagonalMovement.always)
 		self.path,_ = finder.find_path(start,end,self.grid)
-		print("value",self.path)
 		self.grid.cleanup()
 		self.roomba.sprite.set_path(self.path)
 
@@ -130,6 +132,8 @@ pygame.init()
 screen = pygame.display.set_mode((1280,736))
 clock = pygame.time.Clock()
 
+screenshot_timer = 0
+interval = 1
 # game setup
 bg_surf = pygame.image.load('map.png').convert()
 matrix = [
@@ -159,15 +163,22 @@ matrix = [
 pathfinder = Pathfinder(matrix)
 
 while True:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			sys.exit()
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			pathfinder.create_path()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-	screen.blit(bg_surf,(0,0))
-	pathfinder.update()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pathfinder.create_path()
 
-	pygame.display.update()
-	clock.tick(60)
+    screen.blit(bg_surf, (0, 0))
+    pathfinder.update()
+
+    # Take screenshots at regular intervals
+    screenshot_timer += clock.tick()  # Increment the timer
+    if screenshot_timer >= interval:
+        save_screenshot(screen, f"user_loc.png")  # Save a screenshot with a unique filename
+        screenshot_timer = 0  # Reset the timer
+
+    pygame.display.update()
+    clock.tick(30)
