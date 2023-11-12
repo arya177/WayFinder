@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddAlarmIcon from '@mui/icons-material/AddAlarm';
 import AlarmOffIcon from '@mui/icons-material/AlarmOff';
 import Dialog from '@mui/material/Dialog';
@@ -6,17 +6,57 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { firebaseApp } from '../firebase';
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEmergencyActive, setIsEmergencyActive] = useState(false);
   const [isCreateGroupDialogOpen, setCreateGroupDialogOpen] = useState(false);
   const [isJoinGroupDialogOpen, setJoinGroupDialogOpen] = useState(false);
+
+  // User Authentication State
+  const [user, setUser] = useState(null);
+
+  const auth = getAuth(); // Get the Firebase Auth instance
+
+  useEffect(() => {
+    // Add a Firebase Authentication observer to check user status
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        setUser(null);  // Clear the user state
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -42,7 +82,7 @@ const Navbar = () => {
     setJoinGroupDialogOpen(false);
   };
 
-  const iconStyle = { color: 'red', fontSize: 35 }; // Adjust the fontSize as needed
+  const iconStyle = { color: 'red', fontSize: 35 };
 
   return (
     <div className="navbar">
@@ -62,16 +102,24 @@ const Navbar = () => {
         </div>
         <ul>
           <li>
-            <Link to="/mygroups" className="link">My Groups</Link>
+            <Link to="/mygroups" className="link">
+              My Groups
+            </Link>
           </li>
           <li>
-            <div onClick={openCreateGroupDialog} className="create-group">Create Group</div>
+            <div onClick={openCreateGroupDialog} className="create-group">
+              Create Group
+            </div>
           </li>
           <li>
-            <div onClick={openJoinGroupDialog} className="join-group">Join Group</div>
+            <div onClick={openJoinGroupDialog} className="join-group">
+              Join Group
+            </div>
           </li>
           <li>
-            <Link to="/settings" className="link">Settings</Link>
+            <Link to="/settings" className="link">
+              Settings
+            </Link>
           </li>
         </ul>
       </div>
@@ -82,6 +130,23 @@ const Navbar = () => {
           <AlarmOffIcon style={iconStyle} />
         )}
       </div>
+
+      {user ? (
+        <Avatar
+          className="user-profile"
+          alt={user.displayName}
+          src={user.photoURL}
+          onClick={signOutUser}
+        />
+      ) : (
+        <Button
+          className="login-button"
+          onClick={signInWithGoogle}
+          variant="outlined"
+        >
+          Login with Google
+        </Button>
+      )}
 
       <Dialog open={isCreateGroupDialogOpen} onClose={closeCreateGroupDialog} fullWidth>
         <DialogTitle className="dialog-title">Create Group</DialogTitle>
@@ -95,7 +160,7 @@ const Navbar = () => {
             autoComplete="off"
           >
             <TextField id="group-name" label="Group Name" variant="outlined" required />
-            <div className='invite'>
+            <div className="invite">
               <div className="invite-text">Invite members</div>
               <div className="invite-icon">
                 <ContentCopyIcon style={{ fontSize: 25 }} />

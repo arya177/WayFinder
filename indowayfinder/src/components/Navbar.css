@@ -1,103 +1,124 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #FFDE59;
-    color: black;
-    height: 70px;
-    padding: 10px 20px;
-  }
-  
-  .menu-button {
-    cursor: pointer;
-  }
-  
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    width: 30px;
-    cursor: pointer;
-  }
-  
-  .bar {
-    width: 30px;
-    height: 3px;
-    background-color: black;
-    margin: 3px 0;
-  }
-  
-  .menu {
-    width: 350px;
-    height: 100%;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    left: -350px;
-    transition: left 0.3s;
-    z-index: 1;
-  }
-  
-  .menu.open {
-    left: 0;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    margin: 20px 0;
-    cursor: pointer;
-    text-align: center;
-  }
-  
-  .emergency-button {
-    cursor: pointer;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFDE59;
+  color: black;
+  height: 70px;
+  padding: 10px 20px;
+}
 
-  .side-nav{
-    width: inherit;
-    height: 190px;
-    background-color: #FFDE59;
-  }
+.menu-button {
+  cursor: pointer;
+}
 
-  .side-nav-text{
-    font-size: 30px;
-    padding-top: 130px;
-  }
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  width: 30px;
+  cursor: pointer;
+}
 
-  .invite {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .invite-text {
-    margin-left: 10px;
-  }
-  .invite-icon {
-    margin-right: 10px;
-  }
-  .link {
-    text-decoration: none;
-    color: black; /* Remove text decoration for links */
-  }
-  
-  .create-group {
-    cursor: pointer; /* Add a pointer cursor for the "Create Group" button */
-  }
-  
-  /* Add more styling as needed */
-  /* .dialog-title {
-    background-color: #FFDE59;
-  }
-  
-  .dialog-actions {
-    background-color: #FFDE59;
-  } */
+.bar {
+  width: 30px;
+  height: 3px;
+  background-color: black;
+  margin: 3px 0;
+}
+
+.menu {
+  width: 350px;
+  height: 100%;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: -350px;
+  transition: left 0.3s;
+  z-index: 1;
+}
+
+.menu.open {
+  left: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 20px 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.emergency-button {
+  cursor: pointer;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.side-nav{
+  width: inherit;
+  height: 190px;
+  background-color: #FFDE59;
+}
+
+.side-nav-text{
+  font-size: 30px;
+  padding-top: 130px;
+}
+
+.invite {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.invite-text {
+  margin-left: 10px;
+}
+.invite-icon {
+  margin-right: 10px;
+}
+.link {
+  text-decoration: none;
+  color: black; /* Remove text decoration for links */
+}
+
+.create-group {
+  cursor: pointer; /* Add a pointer cursor for the "Create Group" button */
+}
+
+/* Add more styling as needed */
+/* .dialog-title {
+  background-color: #FFDE59;
+}
+
+.dialog-actions {
+  background-color: #FFDE59;
+} */
+.login-button {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+}
+
+.user-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+}
