@@ -1,37 +1,66 @@
+// Import Axios library
 import axios from 'axios';
 
-  export const addUser = async (userData) => {
-    try {
-      const response = await axios.post('http://localhost:3000/addUser', userData);
-      console.log(response.data); // Handle success
-    } catch (error) {
-      console.error('Error adding user:', error.response.data); // Handle error
-    }
-  };
+// Set the base URL for Axios
+axios.defaults.baseURL = 'http://localhost:8000'; // Replace with your backend URL
 
-  export const getUser = async (uid) => {
-    try {
-      const response = await axios.get(`http://localhost:3000/getUser/${uid}`);
-      console.log(response.data); // Handle success
-    } catch (error) {
-      console.error('Error getting user:', error.response.data); // Handle error
-    }
-  };
+// Function to add a new user
+export const addUser = async (userData) => {
+  try {
+    console.log(userData)
+    const response = await axios.post('/api/users/addUser', userData);
+    console.log(response.data); // Log the server response
+  } catch (error) {
+    console.error('Error adding user:', error.response.data);
+  }
+};
 
-  export const updateUser = async (uid, updatedUserData) => {
-    try {
-      const response = await axios.put(`http://localhost:3000/updateUser/${uid}`, updatedUserData);
-      console.log(response.data); // Handle success
-    } catch (error) {
-      console.error('Error updating user:', error.response.data); // Handle error
-    }
-  };
+// Function to get user details by username
+export const getUserByUsername = async (username) => {
+  try {
+    const response = await axios.get(`/api/users/getUserByUsername/${username}`);
+    console.log(response.data); // Log the user details
+    return response
+  } catch (error) {
+    console.error('Error getting user:', error.response.data);
+  }
+};
 
-  export const deleteUser = async (uid) => {
-    try {
-        const response = await axios.delete(`http://localhost:3000/deleteUser/${uid}`);
-        console.log(response.data); // Handle success
-    } catch (error) {
-        console.error('Error deleting user:', error.response.data); // Handle error
-    }
-  };
+// Function to update user details by username
+export const updateUserByUsername = async (username, updatedUserData) => {
+  try {
+    const response = await axios.put(`/api/users/updateUserByUsername/${username}`, updatedUserData);
+    console.log(response.data); // Log the server response
+  } catch (error) {
+    console.error('Error updating user:', error.response.data);
+  }
+};
+
+// Function to delete user by username
+export const deleteUserByUsername = async (username) => {
+  try {
+    const response = await axios.delete(`/api/users/deleteUserByUsername/${username}`);
+    console.log(response.data); // Log the server response
+  } catch (error) {
+    console.error('Error deleting user:', error.response.data);
+  }
+};
+
+export const createGroup = async (groupDetails) => {
+  try {
+    const response = await axios.post(`/api/users/createGroup/${groupDetails}`);
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error in creating group:', error.response.data);
+  }
+}
+
+export const joinGroup = async (groupDetails) => {
+  try{
+    const response = await axios.post(`/api/users/joinGroup/${groupDetails}`);
+    console.log(response.data);
+  } catch (error) {
+    console.error('Error in joining group:', error.response.data);
+  }
+}
+

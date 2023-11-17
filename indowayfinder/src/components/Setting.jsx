@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -8,11 +8,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import './Setting.css';
 import { useUserContext } from '../UserContext';
 import Button from '@mui/material/Button';
-
+import { getUserByUsername, updateUserByUsername } from '../api'
 
 const Setting = () => {
     const user = useUserContext();
     const [routePreference, setRoutePreference] = useState("shortest_route");
+    const [userDetails, setUserDetails] = useState(null);
+    useEffect(() => {setUserDetails(getUserByUsername(user.displayName))}, [user])
 
     const handleSaveChanges = () => {
         console.log(routePreference);
@@ -20,8 +22,10 @@ const Setting = () => {
             username: user.displayName,
             email: user.email,
             route_prefrence: routePreference,
-            groups: []
+            groups: userDetails.groups,
+            location: userDetails.location
         }
+        updateUserByUsername(user.displayName, user_details);
     }
     return (
         <>

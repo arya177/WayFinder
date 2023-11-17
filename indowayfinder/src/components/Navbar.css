@@ -38,7 +38,7 @@
   top: 0;
   left: -350px;
   transition: left 0.3s;
-  z-index: 1;
+  z-index: 100; /* Set a high z-index value */
 }
 
 .menu.open {

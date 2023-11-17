@@ -1,3 +1,7 @@
+.main{
+  position: relative;
+  z-index: 99;
+}
 .location-icon {
     margin-right: 10px;
     margin-top: 10px;
@@ -29,3 +33,5 @@
     font-size: 20px; /* Adjust the font size as needed */
     color: #aaa; /* Adjust the color as needed */
   }
+
+  

@@ -12,9 +12,9 @@ import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-
 import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from '../firebase';
+import { addUser,createGroup, joinGroup } from '../api';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +28,17 @@ const Navbar = () => {
   const [timer, setTimer] = useState(30);
   const [user, setUser] = useState(null);
   const [newGroupID, setNewGroupID] = useState(null)
+  const [groupName, setGroupName] = useState('');
+  const [joinGroupCode, setJoinGroupCode] = useState('');
 
+  const handleGroupNameChange = (event) => {
+    // Update the state with the new group name when the TextField value changes
+    setGroupName(event.target.value);
+  };
+
+  const handleJoinGroupCodeChange = (event) => {
+    setJoinGroupCode(event.target.value);
+  }
   const openConfirmDialog = () => {
     // Placeholder function for opening the confirmation dialog
     // You need to implement this function based on your application logic
@@ -97,6 +107,16 @@ const Navbar = () => {
       .then((result) => {
         const user = result.user;
         setUser(user);
+
+        const user_details = {
+          username: user?.displayName,
+          email: user?.email,
+          route_prefrence: 'shortest_route',
+          groups: [],
+          location: [0, 0]
+        }
+        // const details = JSON.stringify(user_details);
+        addUser(user_details);
       })
       .catch((error) => {
         console.error(error);
@@ -172,6 +192,31 @@ const Navbar = () => {
     setIsProfileMenuOpen(false);
   };
 
+  const confirmCreateGroupDialog = () => {
+    if(groupName === ''){
+      alert("Please add group name")
+      return
+    }
+    const group_details = {
+      username: user.displayName,
+      groupName: groupName,
+      groupCode: newGroupID
+    }
+    createGroup(group_details);
+
+  }
+
+  const confirmJoinGroupDialog = () => {
+    if(joinGroupCode === ''){
+      alert("Please add you group code")
+      return
+    }
+    const group_details = {
+      username: user.displayName,
+      groupCode: newGroupID
+    }
+    joinGroup(group_details);
+  }
   const iconStyle = { color: 'red', fontSize: 40 };
 
   return (
@@ -270,7 +315,14 @@ const Navbar = () => {
             noValidate
             autoComplete="off"
           >
-            <TextField id="group-name" label="Group Name" variant="outlined" required />
+          <TextField
+                    id="group-name"
+                    label="Group Name"
+                    variant="outlined"
+                    required
+                    value={groupName}
+                    onChange={handleGroupNameChange}
+          />
             <div className="invite">
               <div className="invite-text">Invite members</div>
               <div className="invite-icon">
@@ -286,7 +338,7 @@ const Navbar = () => {
         </DialogContent>
         <DialogActions className="dialog-actions">
           <Button onClick={closeCreateGroupDialog}>Cancel</Button>
-          <Button onClick={closeCreateGroupDialog}>Create</Button>
+          <Button onClick={confirmCreateGroupDialog}>Create</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={isJoinGroupDialogOpen} onClose={closeJoinGroupDialog} fullWidth>
@@ -301,11 +353,19 @@ const Navbar = () => {
             autoComplete="off"
           >
             <TextField id="group-code" label="Group Code" variant="outlined" required />
+            <TextField
+                    id="group-code"
+                    label="Group Code"
+                    variant="outlined"
+                    required
+                    value={joinGroupCode}
+                    onChange={handleJoinGroupCodeChange}
+          />
           </Box>
         </DialogContent>
         <DialogActions className="dialog-actions">
           <Button onClick={closeJoinGroupDialog}>Cancel</Button>
-          <Button onClick={closeJoinGroupDialog}>Join</Button>
+          <Button onClick={confirmJoinGroupDialog}>Join</Button>
         </DialogActions>
       </Dialog>
 
