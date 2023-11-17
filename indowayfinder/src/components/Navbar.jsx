@@ -21,9 +21,51 @@ const Navbar = () => {
   const [isEmergencyActive, setIsEmergencyActive] = useState(false);
   const [isCreateGroupDialogOpen, setCreateGroupDialogOpen] = useState(false);
   const [isJoinGroupDialogOpen, setJoinGroupDialogOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  // const [selectedEmergency, setSelectedEmergency] = useState(null);
+  const [selectedEmergency, setSelectedEmergency] = useState(null);
+  const [isTimerDialogOpen, setIsTimerDialogOpen] = useState(false);
+  const [timer, setTimer] = useState(30);
+  const [user, setUser] = useState(null);
+  const [newGroupID, setNewGroupID] = useState(null)
+
+  const openConfirmDialog = () => {
+    // Placeholder function for opening the confirmation dialog
+    // You need to implement this function based on your application logic
+    console.log("Opening confirmation dialog");
+  };
+  const openTimerDialog = () => {
+    setIsTimerDialogOpen(true);
+  };
+
+  const closeTimerDialog = () => {
+    setIsTimerDialogOpen(false);
+  };
+  const handleConfirmation = () => {
+    // Placeholder function for handling confirmation logic
+    // You need to implement this function based on your application logic
+    console.log("Handling confirmation logic");
+  };
+
+
+  const startTimer = () => {
+    setTimer(30); // Reset the timer to 30 seconds before starting
+
+    const intervalId = setInterval(() => {
+      setTimer((prevTimer) => prevTimer - 1);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(intervalId);
+      closeTimerDialog();
+      handleConfirmation(); // Handle confirmation logic when timer reaches 0
+    }, 30000);
+  };
+
+
 
   // User Authentication State
-  const [user, setUser] = useState(null);
+
 
   const auth = getAuth(); // Get the Firebase Auth instance
 
@@ -36,6 +78,20 @@ const Navbar = () => {
     return () => unsubscribe();
   }, [auth]);
 
+  const handleCreateGroup = () => {
+    const generatedID = generateGroupID(); // You need to implement this function
+    setNewGroupID(generatedID);
+    console.log("New Group ID:", generatedID);
+    // Close the dialog or perform other actions as needed
+    closeCreateGroupDialog();
+  };
+  const generateGroupID = () => {
+    // Implement your logic to generate a unique group ID
+    // For example, you can use a combination of timestamp and random numbers
+    const timestamp = new Date().getTime();
+    const randomSuffix = Math.floor(Math.random() * 1000);
+    return `${timestamp}-${randomSuffix}`;
+  };
   const signInWithGoogle = () => {
     signInWithPopup(auth, new GoogleAuthProvider())
       .then((result) => {
@@ -52,6 +108,7 @@ const Navbar = () => {
       .then(() => {
         // Sign-out successful.
         setUser(null);  // Clear the user state
+        setIsProfileMenuOpen(false); // Close the profile menu after logout
       })
       .catch((error) => {
         console.error(error);
@@ -67,6 +124,7 @@ const Navbar = () => {
   };
 
   const openCreateGroupDialog = () => {
+    handleCreateGroup()
     setCreateGroupDialogOpen(true);
   };
 
@@ -81,8 +139,40 @@ const Navbar = () => {
   const closeJoinGroupDialog = () => {
     setJoinGroupDialogOpen(false);
   };
+  const openEmergencyDialog = () => {
+    setIsEmergencyActive(true);
+  };
 
-  const iconStyle = { color: 'red', fontSize: 35 };
+  const closeEmergencyDialog = () => {
+    setIsEmergencyActive(false);
+    setSelectedEmergency(null);
+  };
+
+  const startEmergencyTimer = () => {
+    closeEmergencyDialog();
+    openTimerDialog();
+    startTimer();
+  };
+
+  const openEmergencyOptionsDialog = () => {
+    closeCreateGroupDialog();
+    closeJoinGroupDialog();
+    closeProfileMenu();
+    openEmergencyDialog();
+  };
+
+  const selectEmergency = (emergencyType) => {
+    setSelectedEmergency(emergencyType);
+    closeEmergencyDialog();
+    startEmergencyTimer();
+  };
+
+  const closeProfileMenu = () => {
+    // Placeholder function for closing the profile menu
+    setIsProfileMenuOpen(false);
+  };
+
+  const iconStyle = { color: 'red', fontSize: 40 };
 
   return (
     <div className="navbar">
@@ -123,21 +213,34 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      <div className="emergency-button" onClick={toggleEmergency}>
-        {isEmergencyActive ? (
-          <AddAlarmIcon style={iconStyle} />
-        ) : (
-          <AlarmOffIcon style={iconStyle} />
-        )}
-      </div>
-
+      <div className="nav-right">
       {user ? (
-        <Avatar
-          className="user-profile"
-          alt={user.displayName}
-          src={user.photoURL}
-          onClick={signOutUser}
-        />
+        <div className="user-profile-container">
+          <div className="user-profile" onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}>
+            <Avatar
+              alt={user.displayName}
+              src={user.photoURL}
+            />
+          </div>
+          <Dialog open={isProfileMenuOpen} onClose={() => setIsProfileMenuOpen(false)}>
+            <DialogTitle className="dialog-title">Profile</DialogTitle>
+            <DialogContent>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Avatar
+                  alt={user.displayName}
+                  src={user.photoURL}
+                  sx={{ width: 100, height: 100 }}
+                />
+                <h3>{user.displayName}</h3>
+                <p>{user.email}</p>
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={signOutUser}>Logout</Button>
+              <Button onClick={() => setIsProfileMenuOpen(false)}>Close</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
       ) : (
         <Button
           className="login-button"
@@ -147,7 +250,15 @@ const Navbar = () => {
           Login with Google
         </Button>
       )}
-
+      <div className="emergency-button" onClick={toggleEmergency}>
+        {isEmergencyActive ? (
+          <AddAlarmIcon style={iconStyle} />
+        ) : (
+          <AlarmOffIcon style={iconStyle} />
+        )}
+      </div>
+      
+      </div>
       <Dialog open={isCreateGroupDialogOpen} onClose={closeCreateGroupDialog} fullWidth>
         <DialogTitle className="dialog-title">Create Group</DialogTitle>
         <DialogContent>
@@ -164,7 +275,11 @@ const Navbar = () => {
               <div className="invite-text">Invite members</div>
               <div className="invite-icon">
                 <ContentCopyIcon style={{ fontSize: 25 }} />
-                #fff03c
+                {newGroupID ? (
+    newGroupID
+  ) : (
+    <span style={{ color: 'gray' }}>Group Code</span>
+  )}
               </div>
             </div>
           </Box>
@@ -174,7 +289,6 @@ const Navbar = () => {
           <Button onClick={closeCreateGroupDialog}>Create</Button>
         </DialogActions>
       </Dialog>
-
       <Dialog open={isJoinGroupDialogOpen} onClose={closeJoinGroupDialog} fullWidth>
         <DialogTitle className="dialog-title">Join Group</DialogTitle>
         <DialogContent>
@@ -194,6 +308,42 @@ const Navbar = () => {
           <Button onClick={closeJoinGroupDialog}>Join</Button>
         </DialogActions>
       </Dialog>
+
+      {/* Emergency Options Dialog */}
+      <Dialog
+        open={isEmergencyActive}
+        onClose={closeEmergencyDialog}
+        fullWidth
+      >
+        <DialogTitle className="dialog-title">Select Emergency Type</DialogTitle>
+        <DialogContent>
+          <Button onClick={() => selectEmergency('police')}>Police</Button>
+          <Button onClick={() => selectEmergency('ambulance')}>Ambulance</Button>
+          <Button onClick={() => selectEmergency('fire')}>Fire Brigade</Button>
+          {/* Add more emergency options as needed */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeEmergencyDialog}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Timer Dialog */}
+      <Dialog open={isTimerDialogOpen} onClose={closeTimerDialog} fullWidth>
+        <DialogTitle className="dialog-title">Emergency Countdown</DialogTitle>
+        <DialogContent>
+          <p>{`Time remaining: ${timer} seconds`}</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmation} color="primary">
+            Confirm
+          </Button>
+          <Button onClick={closeTimerDialog} color="secondary">
+            Reject
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      
     </div>
   );
 };

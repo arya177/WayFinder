@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
+// import 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,28 +20,29 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const provider = new GoogleAuthProvider();
 
-const Navbar = () => {
-  const [user, setUser] = useState(null);
+// const Navbar = () => {
+//   const [user, setUser] = useState(null);
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // Handle successful sign-in, e.g., update user state
-        const user = result.user;
-        setUser(user);
-      })
-      .catch((error) => {
-        // Handle sign-in errors
-        console.error(error);
-      });
-  };
+//   const signInWithGoogle = () => {
+//     signInWithPopup(auth, provider)
+//       .then((result) => {
+//         // Handle successful sign-in, e.g., update user state
+//         const user = result.user;
+//         setUser(user);
+//       })
+//       .catch((error) => {
+//         // Handle sign-in errors
+//         console.error(error);
+//       });
+//   };
 
-  // ... rest of your component code
+//   // ... rest of your component code
 
-  return (
-    // Your component JSX
-    <></>
-  );
-};
+//   return (
+//     // Your component JSX
+//     <></>
+//   );
+// };
+// const database = firebaseApp.database();
 
 export { auth, provider, firebaseApp };

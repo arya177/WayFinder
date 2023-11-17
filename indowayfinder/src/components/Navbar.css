@@ -1,3 +1,4 @@
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -6,8 +7,10 @@
   color: black;
   height: 70px;
   padding: 10px 20px;
+  position: relative;
 }
 
+/* Hamburger Menu Button */
 .menu-button {
   cursor: pointer;
 }
@@ -26,6 +29,7 @@
   margin: 3px 0;
 }
 
+/* Side Menu */
 .menu {
   width: 350px;
   height: 100%;
@@ -41,6 +45,7 @@
   left: 0;
 }
 
+/* Navigation Links */
 ul {
   list-style: none;
   padding: 0;
@@ -52,73 +57,111 @@ li {
   text-align: center;
 }
 
+/* Emergency Button */
 .emergency-button {
   cursor: pointer;
+  margin-right: 35px;
+  margin-top: 2px;
 }
 
+/* Close Button */
 .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
+  cursor: pointer;
 }
 
-.side-nav{
+/* Side Nav */
+.side-nav {
   width: inherit;
   height: 190px;
   background-color: #FFDE59;
 }
 
-.side-nav-text{
+.side-nav-text {
   font-size: 30px;
   padding-top: 130px;
 }
 
+/* Invite Section */
 .invite {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .invite-text {
   margin-left: 10px;
 }
+
 .invite-icon {
   margin-right: 10px;
 }
+
+/* Navigation Link Styles */
 .link {
   text-decoration: none;
-  color: black; /* Remove text decoration for links */
+  color: black;
 }
 
+/* Create Group Button */
 .create-group {
-  cursor: pointer; /* Add a pointer cursor for the "Create Group" button */
+  cursor: pointer;
 }
 
-/* Add more styling as needed */
-/* .dialog-title {
-  background-color: #FFDE59;
-}
-
-.dialog-actions {
-  background-color: #FFDE59;
-} */
+/* Login Button */
 .login-button {
   cursor: pointer;
   position: absolute;
-  top: 10px;
+  top: 1px;
   right: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: #FFDE59;
+  color: black;
   border: none;
   padding: 5px 10px;
+  transition: background-color 0.3s;
 }
 
+.login-button:hover {
+  background-color: #ffd300; /* Lighter shade on hover */
+}
+
+/* User Profile Icon */
 .user-icon {
   cursor: pointer;
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: #FFDE59;
+  color: black;
   border: none;
   padding: 5px 10px;
+}
+
+/* User Profile Container */
+.user-profile-container {
+  position: relative;
+  cursor: pointer;
+}
+
+/* User Profile Icon */
+.user-profile {
+  position: relative;
+}
+
+/* Dialog Title */
+.dialog-title {
+  background-color: #FFDE59;
+}
+
+/* Dialog Actions */
+.dialog-actions {
+  background-color: #FFDE59;
+}
+
+/* Navbar Right Section */
+.nav-right {
+  display: flex;
+  flex-direction: row-reverse;
 }
