@@ -213,7 +213,7 @@ const Navbar = () => {
     }
     const group_details = {
       username: user.displayName,
-      groupCode: newGroupID
+      groupCode: joinGroupCode
     }
     joinGroup(group_details);
   }
@@ -352,7 +352,7 @@ const Navbar = () => {
             noValidate
             autoComplete="off"
           >
-            <TextField id="group-code" label="Group Code" variant="outlined" required />
+            {/* <TextField id="group-code" label="Group Code" variant="outlined" required /> */}
             <TextField
                     id="group-code"
                     label="Group Code"
