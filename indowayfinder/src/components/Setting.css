@@ -17,8 +17,15 @@
 }
 .prefrence {
     border-bottom: 1px solid black;
+    display: flex;
 }
 
 .radio {
     margin-left: 200px;
+}
+
+.save-btn {
+    margin-top: 30px;
+    margin-left: 1150px;
+
 }

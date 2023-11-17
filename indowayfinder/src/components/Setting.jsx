@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -6,33 +6,55 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './Setting.css';
+import { useUserContext } from '../UserContext';
+import Button from '@mui/material/Button';
+
 
 const Setting = () => {
+    const user = useUserContext();
+    const [routePreference, setRoutePreference] = useState("shortest_route");
+
+    const handleSaveChanges = () => {
+        console.log(routePreference);
+        const user_details = {
+            username: user.displayName,
+            email: user.email,
+            route_prefrence: routePreference,
+            groups: []
+        }
+    }
     return (
         <>
             <div className="user">
                 <p className="user-username-text">username</p>
-                <p className="user-username-value">arya123</p>
+                <p className="user-username-value">{user.displayName}</p>
             </div>
             <div className="user">
                 <p className="user-username-text">email id</p>
-                <p className="user-username-value">aryashahi2002@gmail.com</p>
+                <p className="user-username-value">{user.email}</p>
             </div>
             <div className="prefrence">
+                <div>
                 <p className="user-username-text">route preference</p>
                 <div className="radio">
                 <FormControl >
                     <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="female"
-                        name="radio-buttons-group"
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    value={routePreference}
+                    onChange={(e) => setRoutePreference(e.target.value)}
+                    name="radio-buttons-group"
                     >
-                        
-                        <FormControlLabel value="female" control={<Radio />} label="Shortest route" />
-                        <FormControlLabel value="male" control={<Radio />} label="Stairs" />
-                        <FormControlLabel value="other" control={<Radio />} label="Elevator" />
+                        <FormControlLabel value="shortest_route" control={<Radio />} label="Shortest route" />
+                        <FormControlLabel value="stairs" control={<Radio />} label="Stairs" />
+                        <FormControlLabel value="elevator" control={<Radio />} label="Elevator" />
                     </RadioGroup>
                 </FormControl>
+                </div>
+                </div>
+                <div className="save-btn">
+                    <Button variant="contained" color="primary" onClick={handleSaveChanges}>
+                        Save Changes
+                    </Button>
                 </div>
             </div>
             <div className="user">
