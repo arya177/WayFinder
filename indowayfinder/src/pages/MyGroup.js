@@ -4,6 +4,7 @@ import MyGroups from "../components/MyGroups";
 
 
 const MyGroup = () => {
+    
     return (
         <>
             <div>

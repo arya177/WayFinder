@@ -20,7 +20,7 @@ export const getUserByUsername = async (username) => {
   try {
     const response = await axios.get(`/api/users/getUserByUsername/${username}`);
     console.log(response.data); // Log the user details
-    return response
+    return response.data
   } catch (error) {
     console.error('Error getting user:', error.response.data);
   }
