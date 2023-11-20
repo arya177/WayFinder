@@ -17,6 +17,7 @@ admin.initializeApp({
 });
 
 const db = admin.database();
+app.set('db', db);
 const usersRef = db.ref("users"); // Replace "users" with the correct path to your users collection
 
 // Set usersRef in the app

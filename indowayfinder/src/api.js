@@ -48,7 +48,7 @@ export const deleteUserByUsername = async (username) => {
 
 export const createGroup = async (groupDetails) => {
   try {
-    const response = await axios.post(`/api/users/createGroup/${groupDetails}`);
+    const response = await axios.post(`/api/users/createGroup/`,groupDetails);
     console.log(response.data);
   } catch (error) {
     console.error('Error in creating group:', error.response.data);
@@ -57,7 +57,8 @@ export const createGroup = async (groupDetails) => {
 
 export const joinGroup = async (groupDetails) => {
   try{
-    const response = await axios.post(`/api/users/joinGroup/${groupDetails}`);
+    console.log(groupDetails)
+    const response = await axios.post(`/api/users/joinGroup/`,groupDetails);
     console.log(response.data);
   } catch (error) {
     console.error('Error in joining group:', error.response.data);
