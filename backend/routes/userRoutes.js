@@ -38,6 +38,26 @@ router.get('/getUserByUsername/:username', (req, res) => {
   });
 });
 
+router.get('/getGroupNamebyID/:GroupID', (req, res) => {
+  const GroupID = req.params.GroupID;
+
+  req.app.get('db').ref('groups').child(GroupID ).once('value', (snapshot) => {
+    const group = snapshot.val();
+
+    if (group) {
+      // Group found, send its name in the response
+      res.status(200).json({ groupName: group.name });
+    } else {
+      // Group not found
+      res.status(404).json({ error: 'Group not found' });
+    }
+  }, (error) => {
+    // Handle any errors that may occur during the database query
+    console.error('Error fetching group:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  });
+});
+
 // Define a route to update user details by username
 router.put('/updateUserByUsername/:username', (req, res) => {
   const username = req.params.username; // Get the username from the request parameters
@@ -247,37 +267,53 @@ router.get('/getGroupMembersLocation/:groupId', (req, res) => {
   });
 });
 
-router.get('/getGroupMembersLocation', (req, res) => {
-  const groupId = req.body.groupId;
+router.post('/getGroupMembersLocation', (req, res) => {
+  const groupName = req.body.groupName;
+  if (!groupName) {
+    return res.status(400).json({ error: "Bad Request", message: "groupName is required in the request body" });
+  }
 
-  // Fetch the members of the group from the 'groups' collection
-  req.app.get('db').ref('groups').child(groupId).child('members').once('value', (membersSnapshot) => {
-    const members = membersSnapshot.val();
+  // Query the 'groups' collection to find the group with the specified name
+  req.app.get('db').ref('groups').orderByChild('name').equalTo(groupName).once('value', (groupSnapshot) => {
+    const group = groupSnapshot.val();
 
-    if (members) {
-      // Get an array of user IDs and their status from the 'members' node
-      const memberData = Object.entries(members);
+    if (group) {
+      // Extract the group ID from the snapshot
+      const groupId = Object.keys(group)[0];
 
-      // Filter out users whose status is true
-      const activeMembers = memberData.filter(([userId, status]) => status === true);
+      // Fetch the members of the group from the 'members' node
+      req.app.get('db').ref('groups').child(groupId).child('members').once('value', (membersSnapshot) => {
+        const members = membersSnapshot.val();
+        console.log(members);
+        if (members) {
+          // Get an array of user IDs and their status from the 'members' node
+          const memberData = Object.entries(members);
 
-      // Fetch the location of each active user from the 'users' collection
-      const usersPromises = activeMembers.map(([userId]) => {
-        return req.app.get('usersRef').child(userId).once('value')
-          .then(userSnapshot => ({ userId, location: userSnapshot.val().location }));
+          // Filter out users whose status is true
+          const activeMembers = memberData.filter(([userId, status]) => status === true);
+
+          // Fetch the location of each active user from the 'users' collection
+          const usersPromises = activeMembers.map(([userId]) => {
+            return req.app.get('usersRef').child(userId).once('value')
+              .then(userSnapshot => ({ userId, name: userSnapshot.val().username,location: userSnapshot.val().location }));
+          });
+
+          // Wait for all user location fetch promises to resolve
+          Promise.all(usersPromises)
+            .then(usersLocations => {
+              // usersLocations is an array of objects with userId and location properties
+              res.status(200).json(usersLocations);
+            })
+            .catch(error => {
+              console.error("Error fetching user locations:", error);
+              res.status(500).json({ error: "Error fetching user locations", message: error.message });
+            });
+        } else {
+          res.status(404).json({ error: "Group members not found", message: "Group members not found for the provided group name" });
+        }
       });
-
-      // Wait for all user location fetch promises to resolve
-      Promise.all(usersPromises)
-        .then(usersLocations => {
-          // usersLocations is an array of objects with userId and location properties
-          res.status(200).json(usersLocations);
-        })
-        .catch(error => {
-          res.status(500).json({ error: "Error fetching user locations", message: error.message });
-        });
     } else {
-      res.status(404).json({ error: "Group not found", message: "Group not found with the provided ID" });
+      res.status(404).json({ error: "Group not found", message: "Group not found with the provided name" });
     }
   });
 });

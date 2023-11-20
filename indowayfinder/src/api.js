@@ -65,3 +65,23 @@ export const joinGroup = async (groupDetails) => {
   }
 }
 
+export const getGroupMembersLocation = async (groupName) => {
+  try {
+    console.log(groupName);
+    const response = await axios.post(`api/users/getGroupMembersLocation/`,{groupName : groupName});
+    console.log(response.data);
+    return response.data;
+  } catch(error) {
+    console.error('Error in getting data:', error.response.data);
+  }
+}
+export const getGroupNamebyID = async (GroupID) => {
+  try {
+    const response = await axios.get(`/api/users/getGroupNamebyID/${GroupID}`);
+    console.log(response.data);
+    return response.data
+  } catch (error) {
+    console.error('Error getting Trip:', error.response.data);
+  }
+}
+
