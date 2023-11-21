@@ -12,7 +12,8 @@ const MapComponent = ({ center, groupMembers }) => {
 
     // Add markers for each group member
     groupMembers.forEach((member) => {
-      L.marker(member.location).addTo(map).bindPopup(member.username);
+      console.log(member)
+      L.marker(member.location).addTo(map).bindPopup(member.name);
     });
 
     return () => {
