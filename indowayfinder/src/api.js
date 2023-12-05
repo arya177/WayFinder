@@ -29,7 +29,16 @@ export const getUserByUsername = async (username) => {
 // Function to update user details by username
 export const updateUserByUsername = async (username, updatedUserData) => {
   try {
-    const response = await axios.put(`/api/users/updateUserByUsername/${username}`, updatedUserData);
+    console.log("updated")
+    const initialLocation = await getCurrentLocation();
+    const updatedData = {
+      username: updatedUserData.displayName,
+      email: updatedUserData.email,
+      route_prefrence: 'shortest_route',
+      groups: [],
+      location: initialLocation
+    };
+    const response = await axios.put(`/api/users/updateUserByUsername/${username}`, updatedData);
     console.log(response.data); // Log the server response
   } catch (error) {
     console.error('Error updating user:', error.response.data);
@@ -85,3 +94,17 @@ export const getGroupNamebyID = async (GroupID) => {
   }
 }
 
+const getCurrentLocation = () => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        resolve([latitude, longitude]);
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        reject(error);
+      }
+    );
+  });
+};
