@@ -1,5 +1,6 @@
 image_search/static/*
 .idea
+**/.DS_Store
 
 /indowayfinder/node_modules
 # Byte-compiled / optimized / DLL files
