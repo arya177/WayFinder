@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from '../firebase';
-import { addUser,createGroup, joinGroup } from '../api';
+import { addUser,createGroup, joinGroup, getUserByUsername, updateUserByUsername } from '../api';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -102,26 +102,93 @@ const Navbar = () => {
     const randomSuffix = Math.floor(Math.random() * 1000);
     return `${timestamp}-${randomSuffix}`;
   };
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, new GoogleAuthProvider())
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
+  // const signInWithGoogle = () => {
+  //   signInWithPopup(auth, new GoogleAuthProvider())
+  //     .then((result) => {
+  //       const user = result.user;
+  //       setUser(user);
 
-        const user_details = {
-          username: user?.displayName,
-          email: user?.email,
+  //       const user_details = {
+  //         username: user?.displayName,
+  //         email: user?.email,
+  //         route_prefrence: 'shortest_route',
+  //         groups: [],
+  //         location: [0, 0]
+  //       }
+  //       // const details = JSON.stringify(user_details);
+  //       addUser(user_details);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      const user = result.user;
+      setUser(user);
+
+      // Check if the user already exists in the database
+      const existingUser = await getUserByUsername(user.displayName);
+      const initialLocation = await getCurrentLocation();
+      console.log(initialLocation);
+      if (existingUser) {
+        console.log('User already exists. Perform update.');
+        // Perform update logic here
+        const updatedUserData = {
+          username: user.displayName,
+          email: user.email,
           route_prefrence: 'shortest_route',
           groups: [],
-          location: [0, 0]
-        }
-        // const details = JSON.stringify(user_details);
-        addUser(user_details);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          location: initialLocation
+        };
+        await updateUserByUsername(user.displayName, updatedUserData);
+      } else {
+        console.log('User does not exist. Perform add.');
+        // Perform add logic here
+        
+        const user_details = {
+          username: user.displayName,
+          email: user.email,
+          route_prefrence: 'shortest_route',
+          groups: [],
+          location: initialLocation
+        };
+        await addUser(user_details);
+
+        // Start interval to update location every 1 minute
+        setInterval(async () => {
+          const newLocation = await getCurrentLocation();
+          const updatedUserData = {
+            location: newLocation
+          };
+          await updateUserByUsername(user.displayName, updatedUserData);
+        }, 60000); // 1 minute interval
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  // Function to get the user's current location
+  const getCurrentLocation = () => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          resolve([latitude, longitude]);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          reject(error);
+        }
+      );
+    });
+  };
+
+
 
   const signOutUser = () => {
     signOut(auth)
