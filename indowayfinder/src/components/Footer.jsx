@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './Footer.css';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
@@ -16,11 +16,39 @@ const Footer = () => {
   };
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isCamera, setIsCamera] = useState(false);
+  const videoRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
     handleSubmit(file);
+  };
+
+  const handleCameraClick = async () => {
+    setIsCamera(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+      
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+    }
+  };
+
+  const handleCaptureClick = () => {
+    const canvas = document.createElement('canvas');
+    const video = videoRef.current;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob((blob) => {
+      const file = new File([blob], 'captured-image.png');
+      setSelectedFile(file);
+      handleSubmit(file);
+    }, 'image/png');
   };
 
   const handleSubmit = async (file) => {
@@ -80,10 +108,12 @@ const Footer = () => {
         <div className="divider-line-vertical"></div>
         <div className="right-part">
           <div className="camera-icon">
-            {/* <button onClick={handleSubmit}> */}
-            <CameraAltIcon style={defaultIconStyle} />
-            {/* </button> */}
+            <CameraAltIcon style={defaultIconStyle} onClick={handleCameraClick} />
+            {isCamera && <button onClick={handleCaptureClick}>Capture</button>}
           </div>
+          {isCamera && <div className="camera-icon">
+            <video ref={videoRef} style={{ display: 'block' }} autoPlay muted />
+          </div>}
         </div>
       </div>
     </div>

@@ -1,74 +1,99 @@
 .footer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color:  #FFDE59;
-    height: 200px;
-    margin-top: 33%;
-    /* border-top: 1px solid black;  */
-  }
-  
-  .upper {
-    flex: 6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  
-  .lower {
-    flex: 4;
-    display: flex;
-  }
-  
-  .location-icon {
-    margin-right: 10px;
-    margin-top: 10px;
-  }
-  
-  .rounded-edge{
-    width: 1000px;
-    height: 40px;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #FFDE59;
+  margin-top: 50px; /* Adjusted margin-top */
+  padding: 20px; /* Added padding for better spacing */
+}
 
-  .rounded-edge-textarea {
-    flex: 1;
-    border: 2px solid black;
-    border-radius: 20px;
-    padding: 5px 10px;
-    width: inherit;
-    height: inherit;
-  }
-  
-  .rounded-edge-textarea::placeholder {
-    font-size: 20px; /* Adjust the font size as needed */
-    color: #aaa; /* Adjust the color as needed */
-  }
-  
-  .divider-line {
-    border-top: 2px solid black;
-    margin: 10px 0;
-  }
-  
-  .divider-line-vertical {
-    width: 2px;
-    background-color: black;
-    margin: 0 10px;
-  }
-  
-  .left-part {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Add styling for the folder icon */
-  }
-  
-  .right-part {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Add styling for the camera icon */
-  }
-  
+.upper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.lower {
+  flex: 1;
+  display: flex;
+}
+
+.location-icon {
+  margin-right: 10px;
+}
+
+.rounded-edge {
+  flex: 1;
+  max-width: 600px; /* Adjusted max-width */
+  display: flex;
+  align-items: center;
+}
+
+.rounded-edge-textarea {
+  flex: 1;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px; /* Adjusted font size */
+}
+
+.rounded-edge-textarea::placeholder {
+  color: #aaa;
+}
+
+.divider-line {
+  border-top: 2px solid black;
+  margin: 10px 0;
+}
+
+.divider-line-vertical {
+  width: 2px;
+  background-color: black;
+  margin: 0 10px;
+}
+
+.left-part,
+.right-part {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-icon,
+.camera-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-icon button {
+  margin-left: 10px; /* Adjusted margin for the button */
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-top: 10px; /* Added margin-top for the video element */
+}
+/* Add the following style for the capture button */
+.camera-icon button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50; /* Green background color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.camera-icon button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
