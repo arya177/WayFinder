@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+
 const MapComponent = ({ center, groupMembers }) => {
   useEffect(() => {
     // Create a map instance with a specified center and zoom level
-    const map = L.map('map').setView(center, 13);
+    const map = L.map('map').setView(center, 22);
 
     // Add a tile layer (you can use any tile provider)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
