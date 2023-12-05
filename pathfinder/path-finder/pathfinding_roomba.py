@@ -2,6 +2,7 @@ import pygame, sys
 from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 from pathfinding.core.diagonal_movement import DiagonalMovement
+import argparse
 
 # Function to save a screenshot
 def save_screenshot(screen, filename):
@@ -19,6 +20,8 @@ class Pathfinder:
 
 		# Roomba
 		self.roomba = pygame.sprite.GroupSingle(Roomba(self.empty_path))
+		# self.start_image = pygame.image.load('start.png').convert_alpha()
+		# self.destination_image = pygame.image.load('destination.png').convert_alpha()
 
 	def empty_path(self):
 		self.path = []
@@ -32,16 +35,21 @@ class Pathfinder:
 			rect = pygame.Rect((col * 32,row * 32),(32,32))
 			screen.blit(self.select_surf,rect)
 
-	def create_path(self):
+	def create_path(self, final_location,event):
 
 		# start
 		start_x, start_y = self.roomba.sprite.get_coord()
-		start = self.grid.node(10,8)
-		print(start_x,start_y)
+		start = self.grid.node(start_x,start_y)
 		
 		# end
-		mouse_pos = pygame.mouse.get_pos()
-		end_x,end_y =  mouse_pos[0] // 32, mouse_pos[1] // 32  
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			print("hi")
+			mouse_pos = pygame.mouse.get_pos()
+			end_x,end_y =  mouse_pos[0] // 32, mouse_pos[1] // 32  
+			print(mouse_pos)
+			# end = self.grid.node(end_x,end_y) 
+		else: 
+			end_x,end_y =  final_location
 		end = self.grid.node(end_x,end_y) 
 
 		# path
@@ -74,7 +82,7 @@ class Roomba(pygame.sprite.Sprite):
 		# basic
 		super().__init__()
 		self.image = pygame.image.load('roomba.png').convert_alpha()
-		self.rect = self.image.get_rect(center = (60,60))
+		self.rect = self.image.get_rect(center =(380,140))
 
 		# movement 
 		self.pos = self.rect.center
@@ -128,14 +136,19 @@ class Roomba(pygame.sprite.Sprite):
 		self.check_collisions()
 		self.rect.center = self.pos
 
-# pygame setup
+def parse_command_line_args():
+    parser = argparse.ArgumentParser(description='Pathfinding with Roomba in Pygame')
+    parser.add_argument('--x', type=int, help='Final location x-coordinate', default=None)
+    parser.add_argument('--y', type=int, help='Final location y-coordinate', default=None)
+    return parser.parse_args()
+
 pygame.init()
-screen = pygame.display.set_mode((1280,768))
+screen = pygame.display.set_mode((1280, 768)) #40*24
 clock = pygame.time.Clock()
 
-screenshot_timer = 0
-interval = 1
-# game setup
+# screenshot_timer = 0
+# interval = 1000  # Set the interval in milliseconds (1 second)
+
 bg_surf = pygame.image.load('output_image.png').convert()
 matrix = [
 	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -163,24 +176,37 @@ matrix = [
 	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0],
 	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 pathfinder = Pathfinder(matrix)
+args = parse_command_line_args()
+if args.x is not None and args.y is not None:
+    final_location = (args.x, args.y)
+    pathfinder.create_path(final_location, event = pygame.event.Event(1))
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            sys.exit()
+            quit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            pathfinder.create_path()
+            if event.button == 1:  # Left mouse button
+                final_location = pygame.mouse.get_pos()
+                pathfinder.create_path(final_location,event)
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_RETURN]:  # Enter key pressed
+        final_location = input("Enter final coordinates (x y): ")
+        try:
+            final_location = tuple(map(int, final_location.split()))
+            pathfinder.create_path(final_location,event)
+        except ValueError:
+            print("Invalid input. Please enter two integers separated by a space.")
 
     screen.blit(bg_surf, (0, 0))
     pathfinder.update()
 
-    # Take screenshots at regular intervals
-    screenshot_timer += clock.tick()  # Increment the timer
-    if screenshot_timer >= interval:
-        save_screenshot(screen, f"user_loc.png")  # Save a screenshot with a unique filename
-        screenshot_timer = 0  # Reset the timer
-
+    # screenshot_timer += clock.tick(30)  # Increment the timer
+    # if screenshot_timer >= interval:
+    #     save_screenshot(screen, "user_loc")
+    #     screenshot_timer = 0  # Reset the timer
     pygame.display.update()
-    clock.tick(30)
+    # clock.tick(30)
