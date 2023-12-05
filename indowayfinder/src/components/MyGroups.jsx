@@ -62,7 +62,11 @@ const MyGroups = () => {
 
           await Promise.all(promises);
 
+          console.log(userDetailsData)
+          // const data = Object.values(userDetailsData.location);
+          // console.log(data);
           setUserDetails(userDetailsData);
+          // setCenter(userDetailsData.location);
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
@@ -74,6 +78,11 @@ const MyGroups = () => {
     fetchUserDetails();
   }, [user]);
 
+  // useEffect(() => {
+  //   console.log(userDetails);
+  //   console.log(userDetails?.loction)
+  //   setCenter(userDetails?.location)
+  // }, [userDetails])
   return (
     <>
       {!showMap && userDetails &&
