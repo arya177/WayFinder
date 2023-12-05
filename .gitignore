@@ -3,6 +3,7 @@ image_search/static/*
 **/.DS_Store
 
 /indowayfinder/node_modules
+/backend/node_modules
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
