@@ -3,6 +3,8 @@ import './Footer.css';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { useNavigate } from "react-router-dom";
+
 
 const Footer = () => {
   const locationIconStyle = {
@@ -48,9 +50,10 @@ const Footer = () => {
       const file = new File([blob], 'captured-image.png');
       setSelectedFile(file);
       handleSubmit(file);
+
     }, 'image/png');
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (file) => {
     if (file) {
       const formData = new FormData();
@@ -63,7 +66,9 @@ const Footer = () => {
         });
 
         if (response.ok) {
+          navigate("/search");
           console.log('Image uploaded successfully!');
+          
           // Add any additional handling or state updates as needed
         } else {
           console.error('Failed to upload image');
