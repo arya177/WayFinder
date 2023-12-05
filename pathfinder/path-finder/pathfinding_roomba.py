@@ -9,6 +9,7 @@ def save_screenshot(screen, filename):
     pygame.image.save(screen, filename)
 
 class Pathfinder:
+    
 	def __init__(self,matrix):
 		# setup
 		self.matrix = matrix
@@ -43,10 +44,10 @@ class Pathfinder:
 		
 		# end
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			print("hi")
+			# print("hi")
 			mouse_pos = pygame.mouse.get_pos()
 			end_x,end_y =  mouse_pos[0] // 32, mouse_pos[1] // 32  
-			print(mouse_pos)
+			# print(mouse_pos)
 			# end = self.grid.node(end_x,end_y) 
 		else: 
 			end_x,end_y =  final_location
@@ -57,7 +58,7 @@ class Pathfinder:
 		self.path,_ = finder.find_path(start,end,self.grid)
 		self.grid.cleanup()
 		self.roomba.sprite.set_path(self.path)
-
+	
 	def draw_path(self):
 		if self.path:
 			points = []
@@ -75,6 +76,10 @@ class Pathfinder:
 		# updating and drawing
 		self.roomba.update()
 		self.roomba.draw(screen)
+	def set_roomba_position(self, x, y):
+         self.roomba.sprite.rect.center = (x, y)
+	
+	
 
 class Roomba(pygame.sprite.Sprite):
 	def __init__(self,empty_path):
@@ -82,7 +87,8 @@ class Roomba(pygame.sprite.Sprite):
 		# basic
 		super().__init__()
 		self.image = pygame.image.load('roomba.png').convert_alpha()
-		self.rect = self.image.get_rect(center =(380,140))
+
+		self.rect = self.image.get_rect(center =(60,60))
 
 		# movement 
 		self.pos = self.rect.center
@@ -135,7 +141,10 @@ class Roomba(pygame.sprite.Sprite):
 		self.pos += self.direction * self.speed
 		self.check_collisions()
 		self.rect.center = self.pos
-
+	def set_coord(self, x, y):
+         self.rect.center = (x, y)
+	
+	
 def parse_command_line_args():
     parser = argparse.ArgumentParser(description='Pathfinding with Roomba in Pygame')
     parser.add_argument('--x', type=int, help='Final location x-coordinate', default=None)
@@ -175,7 +184,34 @@ matrix = [
 	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,0,1,0,1,0,1,1,0,1,1,1,0],
 	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0],
 	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+matrix2 = [
+   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	[1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[1,1,1,1,1,1,1,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,0],
+	[1,1,1,1,1,1,1,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
+	[0,0,0,0,0,1,1,1,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0],
+	[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+	[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+	[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+	[0,0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,1,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,0],
+	[0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+]
 pathfinder = Pathfinder(matrix)
+current_matrix_set = matrix 
 args = parse_command_line_args()
 if args.x is not None and args.y is not None:
     final_location = (args.x, args.y)
@@ -191,6 +227,7 @@ while True:
             if event.button == 1:  # Left mouse button
                 final_location = pygame.mouse.get_pos()
                 pathfinder.create_path(final_location,event)
+    
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_RETURN]:  # Enter key pressed
@@ -201,8 +238,24 @@ while True:
         except ValueError:
             print("Invalid input. Please enter two integers separated by a space.")
 
+    
     screen.blit(bg_surf, (0, 0))
     pathfinder.update()
+    roomba_position = pathfinder.roomba.sprite.get_coord()
+    if roomba_position == (0, 1):
+        
+        # Toggle between the sets of matrices and background images
+        if current_matrix_set == matrix:
+            
+            current_matrix_set = matrix2
+            bg_surf = pygame.image.load('output2_image.png').convert()
+        else:
+           
+            current_matrix_set = matrix
+            bg_surf = pygame.image.load('output_image.png').convert()
+
+        pathfinder = Pathfinder(current_matrix_set)  # Update the Pathfinder with the new set of matrices
+        pathfinder.roomba.sprite.set_coord(60, 60) 
 
     # screenshot_timer += clock.tick(30)  # Increment the timer
     # if screenshot_timer >= interval:
