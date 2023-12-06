@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const { exec } = require('child_process');
 // Middleware to pass usersRef to the routes
 router.use((req, res, next) => {
   req.usersRef = req.app.get('usersRef'); // Get usersRef from the app
@@ -10,8 +10,6 @@ router.use((req, res, next) => {
 router.post('/addUser', (req, res) => {
   const userData = req.body; // Expecting a JSON object with user data
   const usersRef = req.usersRef; // Get usersRef from the request
-  console.log("userData:", userData);
-  console.log("usersRef:", usersRef);
   // Push the user data to the Firebase Realtime Database
   usersRef.push(userData, (error) => {
     if (error) {
@@ -37,6 +35,47 @@ router.get('/getUserByUsername/:username', (req, res) => {
     }
   });
 });
+
+router.get('/runPythonCode/:x/:y', (req,res) => {
+  const x  = Math.floor(req.params.x/32);
+  const y = Math.floor(req.params.y/32);
+  const scriptPath = '/Users/tony/projects/WayFinder/pathfinder/path-finder/pathfinding_roomba.py'; 
+  exec(`python3 /Users/tony/projects/WayFinder/pathfinder/path-finder/pathfinding_roomba.py --x ${x} --y ${y}`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`stderr: ${stderr}`);
+      return;
+    }
+    console.log(`Python script started in a tmux session`);
+  });
+})
+
+router.get('/getImageDetails/:key', async (req, res) => {
+  const key = req.params.key;
+  if (!key) {
+    return res.status(400).json({ error: 'Invalid key' });
+  }
+
+  const imagesRef = req.app.get('db').ref('image');  // Assuming 'db' is your Realtime Database instance
+
+  try {
+    const snapshot = await imagesRef.child(key).once('value');
+    const imageData = snapshot.val();
+
+    if (imageData) {
+      return res.status(200).json({ data: imageData });
+    } else {
+      return res.status(404).json({ error: 'Image not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving image:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 router.get('/getGroupNamebyID/:GroupID', (req, res) => {
   const GroupID = req.params.GroupID;

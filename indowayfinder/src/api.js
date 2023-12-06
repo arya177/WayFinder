@@ -74,6 +74,19 @@ export const joinGroup = async (groupDetails) => {
   }
 }
 
+export const runPythonCode = (x,y) => {
+  const response = axios.get(`api/users/runPythonCode/${x}/${y}`);
+}
+
+export const getImageDetails = async (key) => {
+  try {
+    const response = await axios.get(`api/users/getImageDetails/${key}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error in fetching Data", error.response.data);
+  }
+}
+
 export const getGroupMembersLocation = async (groupName) => {
   try {
     console.log(groupName);
