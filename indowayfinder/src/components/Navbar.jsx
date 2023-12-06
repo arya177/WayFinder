@@ -15,6 +15,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseApp } from '../firebase';
 import { addUser,createGroup, joinGroup, getUserByUsername, updateUserByUsername } from '../api';
+import { Snackbar } from '@mui/material';
+
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -102,27 +104,6 @@ const Navbar = () => {
     const randomSuffix = Math.floor(Math.random() * 1000);
     return `${timestamp}-${randomSuffix}`;
   };
-  // const signInWithGoogle = () => {
-  //   signInWithPopup(auth, new GoogleAuthProvider())
-  //     .then((result) => {
-  //       const user = result.user;
-  //       setUser(user);
-
-  //       const user_details = {
-  //         username: user?.displayName,
-  //         email: user?.email,
-  //         route_prefrence: 'shortest_route',
-  //         groups: [],
-  //         location: [0, 0]
-  //       }
-  //       // const details = JSON.stringify(user_details);
-  //       addUser(user_details);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
 
   const signInWithGoogle = async () => {
     try {
@@ -270,6 +251,7 @@ const Navbar = () => {
       groupCode: newGroupID
     }
     createGroup(group_details);
+    closeCreateGroupDialog()
 
   }
 
@@ -283,8 +265,24 @@ const Navbar = () => {
       groupCode: joinGroupCode
     }
     joinGroup(group_details);
+    closeJoinGroupDialog();
   }
   const iconStyle = { color: 'red', fontSize: 40 };
+
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyClick = () => {
+    if (newGroupID) {
+      navigator.clipboard.writeText(newGroupID)
+        .then(() => {
+          setCopySuccess(true);
+        })
+        .catch((err) => {
+          console.error('Error copying to clipboard:', err);
+        });
+    }
+  };
+
 
   return (
     <div className="navbar">
@@ -393,7 +391,7 @@ const Navbar = () => {
             <div className="invite">
               <div className="invite-text">Invite members</div>
               <div className="invite-icon">
-                <ContentCopyIcon style={{ fontSize: 25 }} />
+                <ContentCopyIcon style={{ fontSize: 25 }} onClick={handleCopyClick}/>
                 {newGroupID ? (
     newGroupID
   ) : (
@@ -401,6 +399,12 @@ const Navbar = () => {
   )}
               </div>
             </div>
+            <Snackbar
+              open={copySuccess}
+              autoHideDuration={2000}
+              onClose={() => setCopySuccess(false)}
+              message="Group Code copied to clipboard!"
+            />
           </Box>
         </DialogContent>
         <DialogActions className="dialog-actions">

@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './SearchResults.css'; // Import your CSS file for styling
 import { getImageDetails,runPythonCode } from '../api';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const SearchResult = () => {
+  const location = useLocation();
+  const response = location.state?.response;
 
+  useEffect(() => {
+    console.log(response);
+  }, [response]);
+
+
+ 
   const submitData = (x,y) => {
     console.log(x,y);
       runPythonCode(x,y);
@@ -12,7 +22,7 @@ const SearchResult = () => {
   const [imageList, setImagelist] = useState([
     {
       similarity: '0.23',
-      imageUrl: 'static/img/16.png',
+      imageUrl: '/home/arya/Documents/projects/fyp/WayFinder/indowayfinder/src/images/marker.jpg',
     },
     {
       similarity: '0.56',
@@ -82,20 +92,23 @@ const SearchResult = () => {
 
   //   // Add more image data as needed
   // ];
-
   return (
     <div className="image-grid">
       {dataList.map((image, index) => (
         <div className="image-item" key={image.imageUrl}>
-          <img src={`//put the link here like users/tony/projects/wayfinder/image_search/${image.imageUrl}`}
-            alt={image.data.data.name}
+          <img
+            src='/home/arya/Documents/projects/fyp/WayFinder/indowayfinder/src/images/marker.jpg'
+            alt={image.data?.data?.name} // Add optional chaining here
           />
           <div className="image-details">
-            <p>{image.data.name}</p>
-            <p>{image.data.data.Desc}</p>
+            <p>{image.data?.name}</p>
+            <p>{image.data?.data?.Desc}</p>
             <p>{image.similarity}</p>
-            <p>{image.data.data.X }</p><p>{image.data.data.Y}</p>
-            <button onClick={() => submitData(image.data.data.X,image.data.data.Y)}>Get Direction</button>
+            <p>{image.data?.data?.X}</p>
+            <p>{image.data?.data?.Y}</p>
+            <button onClick={() => submitData(image.data?.data?.X, image.data?.data?.Y)}>
+              Get Direction
+            </button>
           </div>
         </div>
       ))}

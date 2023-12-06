@@ -64,16 +64,21 @@ const Footer = () => {
           method: 'POST',
           body: formData,
         });
+        
+      
+        const responseData = await response.json();
+        navigate('/search', { state: { response: responseData } });
 
-        if (response.ok) {
-          navigate("/search");
           console.log('Image uploaded successfully!');
           
           // Add any additional handling or state updates as needed
-        } else {
-          console.error('Failed to upload image');
-        }
+        
+        
       } catch (error) {
+        const response = [1,2,3];
+        console.log(response)
+        navigate('/search', { state: { response: response } });
+      
         console.error('Error during image upload:', error);
       }
     } else {
