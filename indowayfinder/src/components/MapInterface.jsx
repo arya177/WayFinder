@@ -64,7 +64,7 @@ const MapInterface = () => {
         }
       }
   
-      setCenter([0, 0]);
+      // setCenter([0, 0]);
     };
   
     useEffect(() => {
@@ -75,10 +75,10 @@ const MapInterface = () => {
     return(
         <>
           <div className="main">
-            <div className="upper">
+            {/* <div className="upper">
             <div className="location-icon"><LocationOnIcon style={locationIconStyle} /></div>
             <div className="rounded-edge"><input className="rounded-edge-textarea" type="text" placeholder="Start Location" /></div>
-            </div>
+            </div> */}
             <MapComponent center={center} groupMembers={groupMembers} />
           </div>
         </>
