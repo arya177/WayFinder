@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './SearchResults.css'; // Import your CSS file for styling
 import { getImageDetails,runPythonCode } from '../api';
-import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import marker from '../images/marker.jpg'
+
 
 const SearchResult = () => {
   const location = useLocation();
@@ -22,7 +23,8 @@ const SearchResult = () => {
   const [imageList, setImagelist] = useState([
     {
       similarity: '0.23',
-      imageUrl: '/home/arya/Documents/projects/fyp/WayFinder/indowayfinder/src/images/marker.jpg',
+      // imageUrl: '/home/arya/Documents/projects/fyp/WayFinder/image_server/uploads/image-1701798936212.png',
+      imageUrl: '/public/image-1701798950407.png',
     },
     {
       similarity: '0.56',
@@ -97,7 +99,7 @@ const SearchResult = () => {
       {dataList.map((image, index) => (
         <div className="image-item" key={image.imageUrl}>
           <img
-            src='/home/arya/Documents/projects/fyp/WayFinder/indowayfinder/src/images/marker.jpg'
+            src={marker}
             alt={image.data?.data?.name} // Add optional chaining here
           />
           <div className="image-details">
