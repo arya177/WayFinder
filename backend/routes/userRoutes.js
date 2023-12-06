@@ -37,8 +37,8 @@ router.get('/getUserByUsername/:username', (req, res) => {
 });
 
 router.get('/runPythonCode/:x/:y', (req,res) => {
-  const x  = Math.floor(req.params.x/32);
-  const y = Math.floor(req.params.y/32);
+  const x  = Math.floor((req.params.x%10000)/32);
+  const y = Math.floor((req.params.y%10000)/32);
   const scriptPath = '/Users/tony/projects/WayFinder/pathfinder/path-finder/pathfinding_roomba.py'; 
   exec(`python3 /Users/tony/projects/WayFinder/pathfinder/path-finder/pathfinding_roomba.py --x ${x} --y ${y}`, (error, stdout, stderr) => {
     if (error) {

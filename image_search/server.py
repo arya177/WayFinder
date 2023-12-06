@@ -30,12 +30,6 @@ def index():
 
         # Run search
         query = fe.extract(img)
-<<<<<<< HEAD
-        dists = np.linalg.norm(features-query, axis=1)  # L2 distances to features
-        ids = np.argsort(dists)[:30]  # Top 30 results
-        scores = [{"distance": float(dists[id]), "img_path"
-        : str(img_paths[id])} for id in ids]
-=======
         dists = np.linalg.norm(features - query, axis=1)  # L2 distances to features
 
         # Convert distances to similarity scores
@@ -48,7 +42,6 @@ def index():
         ids = np.argsort(normalized_scores)[::-1][:30]
         scores = [{"similarity": float(normalized_scores[id]), "imageUrl": str(img_paths[id])} for id in ids]
 
->>>>>>> 9ed23db6ace682c1c578b883e672e725e79bcdf2
         return jsonify(scores)
 
 if __name__=="__main__":

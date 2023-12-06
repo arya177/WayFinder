@@ -69,8 +69,8 @@ const SearchResult = () => {
           />
           <div className="image-details">
             <p>{image.data?.data?.name}</p>
-            <p>{image.data?.data?.Desc}</p>
-            <p>{image.similarity}</p>
+            <p>Description :{image.data?.data?.Desc}</p>
+            <p>Similarity Score : {image.similarity}%</p>
             <button onClick={() => submitData(image.data?.data?.X, image.data?.data?.Y)}>
               Get Direction
             </button>
