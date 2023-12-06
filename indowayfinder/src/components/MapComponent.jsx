@@ -25,7 +25,7 @@ const MapComponent = ({ center, groupMembers }) => {
     };
   }, [center, groupMembers]);
 
-  return <div id="map" style={{ height: '650px' }} />;
+  return <div id="map" style={{ height: '700px' }} />;
 };
 
 export default MapComponent;

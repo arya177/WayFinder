@@ -16,6 +16,8 @@ import { getAuth, signOut, GoogleAuthProvider, signInWithPopup } from "firebase/
 import { firebaseApp } from '../firebase';
 import { addUser,createGroup, joinGroup, getUserByUsername, updateUserByUsername } from '../api';
 import { Snackbar } from '@mui/material';
+import logoImage from '../images/logo1.jpeg'
+import { useNavigate } from "react-router-dom";
 
 
 const Navbar = () => {
@@ -33,6 +35,7 @@ const Navbar = () => {
   const [groupName, setGroupName] = useState('');
   const [joinGroupCode, setJoinGroupCode] = useState('');
 
+  const navigate = useNavigate();
   const handleGroupNameChange = (event) => {
     // Update the state with the new group name when the TextField value changes
     setGroupName(event.target.value);
@@ -282,16 +285,22 @@ const Navbar = () => {
         });
     }
   };
-
+  const goToHome = () => {
+    navigate('/')
+  }
 
   return (
     <div className="navbar">
+      <div className="ryt">
       <div className="menu-button" onClick={toggleMenu}>
         <div className={`hamburger ${isMenuOpen ? 'open' : ''}`}>
           <div className="bar"></div>
           <div className="bar"></div>
           <div className="bar"></div>
         </div>
+      </div>
+      <img src={logoImage} alt="Logo" className="logo" onClick={goToHome}/>
+      <p className="logo-txt" onClick={goToHome}>IndoWayFinder</p>
       </div>
       <div className={`menu ${isMenuOpen ? 'open' : ''}`}>
         <div className="side-nav">
