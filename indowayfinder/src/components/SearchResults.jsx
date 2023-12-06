@@ -2,44 +2,64 @@ import React, { useState, useEffect } from 'react';
 import './SearchResults.css'; // Import your CSS file for styling
 import { getImageDetails,runPythonCode } from '../api';
 import { useLocation } from 'react-router-dom';
-import marker from '../images/marker.jpg'
-
+import image1 from '../img/1.jpg';
+import image2 from '../img/2.jpg';
+import image3 from '../img/3.jpg';
+import image4 from '../img/4.jpg';
+import image5 from '../img/5.jpg';
+import image6 from '../img/6.jpg';
+import image7 from '../img/7.jpg';
+import image8 from '../img/8.jpg';
+import image9 from '../img/9.jpg';
+import image10 from '../img/10.jpg';
+import image11 from '../img/11.jpg';
+import image12 from '../img/12.jpg';
+import image13 from '../img/13.jpg';
+import image14 from '../img/14.jpg';
+import image15 from '../img/15.jpg';
+import image16 from '../img/16.jpg';
+import image17 from '../img/17.jpg';
+import image18 from '../img/18.jpg';
+import image19 from '../img/19.jpg';
+import image20 from '../img/20.jpg';
+import image21 from '../img/21.jpg';
+import image22 from '../img/22.jpg';
+import image23 from '../img/23.jpg';
+import image24 from '../img/24.jpg';
+import image25 from '../img/25.jpg';
+import image26 from '../img/26.jpg';
+import image27 from '../img/27.jpg';
+import image28 from '../img/28.jpg';
+import image29 from '../img/29.jpg';
+import image30 from '../img/30.jpg';
+import image31 from '../img/31.jpg';
+import image32 from '../img/32.jpg';
+import image33 from '../img/33.jpg';
+import image34 from '../img/34.jpg';
+import image35 from '../img/35.jpg';
+import image36 from '../img/36.jpg';
+import image37 from '../img/37.jpg';
+import image38 from '../img/38.jpg';
+import image39 from '../img/39.jpg';
+import image40 from '../img/40.jpg';
+import image41 from '../img/41.jpg';
+import image42 from '../img/42.jpg';
 
 const SearchResult = () => {
+
+  const [imageList, setImagelist] = useState([]);
+  const [dataList, setDataList] = useState([]);
   const location = useLocation();
   const response = location.state?.response;
 
   useEffect(() => {
-    console.log(response);
+    setImagelist(response);
   }, [response]);
-
-
  
   const submitData = (x,y) => {
     console.log(x,y);
       runPythonCode(x,y);
   }
-
-  const [imageList, setImagelist] = useState([
-    {
-      similarity: '0.23',
-      // imageUrl: '/home/arya/Documents/projects/fyp/WayFinder/image_server/uploads/image-1701798936212.png',
-      imageUrl: '/public/image-1701798950407.png',
-    },
-    {
-      similarity: '0.56',
-      imageUrl: 'static/img/11.png',
-    },
-    {
-      similarity: '1.345',
-      imageUrl: 'static/img/8.png',
-    },
-    {
-      similarity: '2.345',
-      imageUrl: 'static/img/5.png',
-    },
-  ]);
-  const [dataList, setDataList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,7 +77,6 @@ const SearchResult = () => {
             ...item,
             data: filteredDataList[index],
           }));
-          console.log(combinedDataList)
           setDataList(combinedDataList);
         }
       } catch (error) {
@@ -65,49 +84,20 @@ const SearchResult = () => {
       }
     };
     fetchData();
-  }, [imageList]); // Add dependencies as needed 
-  // const imageList = [
-  //   {
-  //     id: 1,
-  //     name: 'Image 1',
-  //     description: 'Description for Image 1',
-  //     imageUrl: 'url_for_image_1.jpg',
-  //   },
-  //   {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
-  //     {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
-  //     {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
+  }, [imageList]); 
 
-  //   // Add more image data as needed
-  // ];
   return (
     <div className="image-grid">
       {dataList.map((image, index) => (
         <div className="image-item" key={image.imageUrl}>
           <img
-            src={marker}
-            alt={image.data?.data?.name} // Add optional chaining here
+            src={image3}
+            alt={image.data?.data?.name}
           />
           <div className="image-details">
-            <p>{image.data?.name}</p>
+            <p>{image.data?.data?.name}</p>
             <p>{image.data?.data?.Desc}</p>
             <p>{image.similarity}</p>
-            <p>{image.data?.data?.X}</p>
-            <p>{image.data?.data?.Y}</p>
             <button onClick={() => submitData(image.data?.data?.X, image.data?.data?.Y)}>
               Get Direction
             </button>
