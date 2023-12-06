@@ -14,7 +14,7 @@ class Pathfinder:
 		# setup
 		self.matrix = matrix
 		self.grid = Grid(matrix = matrix)
-		self.select_surf = pygame.image.load('${file_loc}/selection.png').convert_alpha()
+		self.select_surf = pygame.image.load('/Users/tony/projects/WayFinder/pathfinder/path-finder/selection.png').convert_alpha()
 
 		# pathfinding
 		self.path = []
@@ -86,7 +86,7 @@ class Roomba(pygame.sprite.Sprite):
 
 		# basic
 		super().__init__()
-		self.image = pygame.image.load('${file_loc}/roomba.png').convert_alpha()
+		self.image = pygame.image.load('/Users/tony/projects/WayFinder/pathfinder/path-finder/roomba.png').convert_alpha()
 
 		self.rect = self.image.get_rect(center =(60,60))
 
@@ -158,7 +158,7 @@ clock = pygame.time.Clock()
 # screenshot_timer = 0
 # interval = 1000  # Set the interval in milliseconds (1 second)
 
-bg_surf = pygame.image.load('${file_loc}/output_image.png').convert()
+bg_surf = pygame.image.load('/Users/tony/projects/WayFinder/pathfinder/path-finder/output_image.png').convert()
 matrix = [
 	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 	[1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0],
@@ -248,11 +248,11 @@ while True:
         if current_matrix_set == matrix:
             
             current_matrix_set = matrix2
-            bg_surf = pygame.image.load('${file_loc}/output2_image.png').convert()
+            bg_surf = pygame.image.load('/Users/tony/projects/WayFinder/pathfinder/path-finder/output2_image.png').convert()
         else:
            
             current_matrix_set = matrix
-            bg_surf = pygame.image.load('${file_loc}/output_image.png').convert()
+            bg_surf = pygame.image.load('/Users/tony/projects/WayFinder/pathfinder/path-finder/output_image.png').convert()
 
         pathfinder = Pathfinder(current_matrix_set)  # Update the Pathfinder with the new set of matrices
         pathfinder.roomba.sprite.set_coord(60, 60) 

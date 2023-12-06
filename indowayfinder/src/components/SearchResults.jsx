@@ -1,45 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './SearchResults.css'; // Import your CSS file for styling
-import { getImageDetails,runPythonCode } from '../api';
+import { getImageDetails, runPythonCode } from '../api';
 import { useLocation } from 'react-router-dom';
-import marker from '../images/marker.jpg'
-
+import imageData from "../components/imagestore"
 
 const SearchResult = () => {
+
+  const [imageList, setImagelist] = useState([]);
+  const [dataList, setDataList] = useState([]);
   const location = useLocation();
   const response = location.state?.response;
 
   useEffect(() => {
-    console.log(response);
+    setImagelist(response);
   }, [response]);
 
-
- 
-  const submitData = (x,y) => {
-    console.log(x,y);
-      runPythonCode(x,y);
+  const submitData = (x, y) => {
+    console.log(x, y);
+    runPythonCode(x, y);
   }
-
-  const [imageList, setImagelist] = useState([
-    {
-      similarity: '0.23',
-      // imageUrl: '/home/arya/Documents/projects/fyp/WayFinder/image_server/uploads/image-1701798936212.png',
-      imageUrl: '/public/image-1701798950407.png',
-    },
-    {
-      similarity: '0.56',
-      imageUrl: 'static/img/11.png',
-    },
-    {
-      similarity: '1.345',
-      imageUrl: 'static/img/8.png',
-    },
-    {
-      similarity: '2.345',
-      imageUrl: 'static/img/5.png',
-    },
-  ]);
-  const [dataList, setDataList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +28,7 @@ const SearchResult = () => {
             const match = item.imageUrl.match(/(\d+)/);
             const extractedNumber = match ? match[0] : null;
             const dataImage = await getImageDetails(extractedNumber);
-    
+
             return dataImage;
           }));
           const filteredDataList = fetchedDataList.filter((data) => data !== null);
@@ -57,7 +36,6 @@ const SearchResult = () => {
             ...item,
             data: filteredDataList[index],
           }));
-          console.log(combinedDataList)
           setDataList(combinedDataList);
         }
       } catch (error) {
@@ -65,49 +43,34 @@ const SearchResult = () => {
       }
     };
     fetchData();
-  }, [imageList]); // Add dependencies as needed 
-  // const imageList = [
-  //   {
-  //     id: 1,
-  //     name: 'Image 1',
-  //     description: 'Description for Image 1',
-  //     imageUrl: 'url_for_image_1.jpg',
-  //   },
-  //   {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
-  //     {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
-  //     {
-  //       id: 1,
-  //       name: 'Image 1',
-  //       description: 'Description for Image 1',
-  //       imageUrl: 'url_for_image_1.jpg',
-  //     },
-
-  //   // Add more image data as needed
-  // ];
+  }, [imageList]);
+  const [img, setImg] = useState([]);
+  useEffect (() => {
+    let data = [];
+    const constructImageUrls = () => {
+      const urls = dataList.forEach((image) => {
+        const filenameWithoutExtension = image.imageUrl.split('/').pop().split('.')[0];
+        console.log(img);
+        data =[...data,imageData[filenameWithoutExtension]]
+      });
+      setImg(data)
+    };
+    constructImageUrls();
+  },[dataList])
+  
   return (
     <div className="image-grid">
-      {dataList.map((image, index) => (
+      {dataList?.map((image, index) => (
         <div className="image-item" key={image.imageUrl}>
           <img
-            src={marker}
-            alt={image.data?.data?.name} // Add optional chaining here
+            src={img[index]}
+            alt={image.data?.data?.name}
+            style={{ height: '400px', width: '400px' }}
           />
           <div className="image-details">
-            <p>{image.data?.name}</p>
+            <p>{image.data?.data?.name}</p>
             <p>{image.data?.data?.Desc}</p>
             <p>{image.similarity}</p>
-            <p>{image.data?.data?.X}</p>
-            <p>{image.data?.data?.Y}</p>
             <button onClick={() => submitData(image.data?.data?.X, image.data?.data?.Y)}>
               Get Direction
             </button>
